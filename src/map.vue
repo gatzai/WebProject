@@ -18,7 +18,7 @@
 
 <script>
   var chinaProvinceCoor = {
-    "黑龙江": {pos:[127.9688, 45.368],        value: 50 },
+    "黑龙江": {pos:[127.9688, 45.368],        value: 5 },
     "内蒙古": {pos:[110.3467, 41.4899],       value: 50 },
     "吉林":   {pos:[125.8154, 44.2584],       value: 50 },
     "北京":   {pos:[116.4551, 40.2539],       value: 50 },
@@ -45,7 +45,7 @@
     "湖南":   {pos:[113.0823, 28.2568],       value: 50 },
     "贵州":   {pos:[106.6992, 26.7682],       value: 50 },
     "云南":   {pos:[102.9199, 25.4663],       value: 50 },
-    "广东":   {pos:[113.12244, 23.009505],    value: 50 },
+    "广东":   {pos:[113.12244, 23.009505],    value: 300 },
     "广西":   {pos:[108.479, 23.1152],        value: 50 },
     "海南":   {pos:[110.3893, 19.8516],       value: 50 },
     "上海":   {pos:[121.4648, 31.2891],       value: 50 },
@@ -103,8 +103,8 @@
       for(var k in data)
       {
         var geoCoord = data[k].pos;
-        //geoCoord.concat(data[k].value)
-        res.push(geoCoord.concat(k));
+        geoCoord.push(data[k].value);
+        res.push(geoCoord);
       }
     	return res;
 	};
@@ -171,7 +171,7 @@
               max:300,
               type: 'piecewise',
               realtime:false,
-              splitNumber:2
+              splitNumber:5
             },
             series: [
    					    {
