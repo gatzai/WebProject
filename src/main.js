@@ -255,7 +255,8 @@ new Vue({
         changeregion:function()
         {
             selectedRegionName = commonjs.selectedRegion;
-            showingRegion[0] = regions[0][commonjs.selectedRegion];
+            if(regions[0][selectedRegionName])
+                showingRegion[0] = regions[0][selectedRegionName];
         }
     }
 })

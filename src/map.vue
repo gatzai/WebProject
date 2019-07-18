@@ -17,52 +17,48 @@
 
 
 <script>
+
+  import echarts from 'echarts'
+  import commonjs from './common.js'
   var chinaProvinceCoor = {
-    "黑龙江": {pos:[127.9688, 45.368],        value: 5 },
-    "内蒙古": {pos:[110.3467, 41.4899],       value: 50 },
-    "吉林":   {pos:[125.8154, 44.2584],       value: 50 },
-    "北京":   {pos:[116.4551, 40.2539],       value: 50 },
-    "辽宁":   {pos:[123.1238, 42.1216],       value: 50 },
-    "河北":   {pos:[114.4995, 38.1006],       value: 50 },
-    "天津":   {pos:[117.4219, 39.4189],       value: 50 },
-    "山西":   {pos:[112.3352, 37.9413],       value: 50 },
-    "陕西":   {pos:[109.1162, 34.2004],       value: 50 },
-    "甘肃":   {pos:[103.5901, 36.3043],       value: 50 },
-    "宁夏":   {pos:[106.3586, 38.1775],       value: 50 },
-    "青海":   {pos:[101.4038, 36.8207],       value: 50 },
-    "新疆":   {pos:[87.9236, 43.5883],        value: 50 },
-    "西藏":   {pos:[91.11, 29.97],            value: 50 },
-    "四川":   {pos:[103.9526, 30.7617],       value: 50 },
-    "重庆":   {pos:[108.384366, 30.439702],   value: 50 },
-    "山东":   {pos:[117.1582, 36.8701],       value: 50 },
-    "河南":   {pos:[113.4668, 34.6234],       value: 50 },
-    "江苏":   {pos:[118.8062, 31.9208],       value: 50 },
-    "安徽":   {pos:[117.29, 32.0581],         value: 50 },
-    "湖北":   {pos:[114.3896, 30.6628],       value: 50 },
-    "浙江":   {pos:[119.5313, 29.8773],       value: 50 },
-    "福建":   {pos:[119.4543, 25.9222],       value: 50 },
-    "江西":   {pos:[116.0046, 28.6633],       value: 50 },
-    "湖南":   {pos:[113.0823, 28.2568],       value: 50 },
-    "贵州":   {pos:[106.6992, 26.7682],       value: 50 },
-    "云南":   {pos:[102.9199, 25.4663],       value: 50 },
-    "广东":   {pos:[113.12244, 23.009505],    value: 300 },
-    "广西":   {pos:[108.479, 23.1152],        value: 50 },
-    "海南":   {pos:[110.3893, 19.8516],       value: 50 },
-    "上海":   {pos:[121.4648, 31.2891],       value: 50 },
-    "test":   {pos:[50,50],                   value:200},
+    "黑龙江": {pos:[127.9688, 45.368],       prize:500,  value: 0 },
+    "内蒙古": {pos:[110.3467, 41.4899],      prize:500,  value: 0 },
+    "吉林":   {pos:[125.8154, 44.2584],      prize:500,  value: 0 },
+    "北京":   {pos:[116.4551, 40.2539],      prize:500,  value: 0 },
+    "辽宁":   {pos:[123.1238, 42.1216],      prize:500,  value: 0 },
+    "河北":   {pos:[114.4995, 38.1006],      prize:500,  value: 0 },
+    "天津":   {pos:[117.4219, 39.4189],      prize:500,  value: 0 },
+    "山西":   {pos:[112.3352, 37.9413],      prize:500,  value: 0 },
+    "陕西":   {pos:[109.1162, 34.2004],      prize:500,  value: 0 },
+    "甘肃":   {pos:[103.5901, 36.3043],      prize:500,  value: 0 },
+    "宁夏":   {pos:[106.3586, 38.1775],      prize:500,  value: 0 },
+    "青海":   {pos:[101.4038, 36.8207],      prize:500,  value: 0 },
+    "新疆":   {pos:[87.9236, 43.5883],       prize:500,  value: 0 },
+    "西藏":   {pos:[91.11, 29.97],           prize:500,  value: 0 },
+    "四川":   {pos:[103.9526, 30.7617],      prize:500,  value: 0 },
+    "重庆":   {pos:[108.384366, 30.439702],  prize:500,  value: 0 },
+    "山东":   {pos:[117.1582, 36.8701],      prize:500,  value: 0 },
+    "河南":   {pos:[113.4668, 34.6234],      prize:500,  value: 0 },
+    "江苏":   {pos:[118.8062, 31.9208],      prize:500,  value: 0 },
+    "安徽":   {pos:[117.29, 32.0581],        prize:500,  value: 0 },
+    "湖北":   {pos:[114.3896, 30.6628],      prize:500,  value: 0 },
+    "浙江":   {pos:[119.5313, 29.8773],      prize:500,  value: 0 },
+    "福建":   {pos:[119.4543, 25.9222],      prize:500,  value: 1 },
+    "江西":   {pos:[116.0046, 28.6633],      prize:500,  value: 0 },
+    "湖南":   {pos:[113.0823, 28.2568],      prize:500,  value: 0 },
+    "贵州":   {pos:[106.6992, 26.7682],      prize:500,  value: 0 },
+    "云南":   {pos:[102.9199, 25.4663],      prize:500,  value: 0 },
+    "广东":   {pos:[113.12244, 23.009505],   prize:500,  value: 1 },
+    "广西":   {pos:[108.479, 23.1152],       prize:500,  value: 0 },
+    "海南":   {pos:[110.3893, 19.8516],      prize:500,  value: 0 },
+    "上海":   {pos:[121.4648, 31.2891],      prize:500,  value: 0 },
+    "test":   {pos:[50,50],                  prize:500,  value: 0  },
   };
 
+/* line operation */
   var lineData = [
     {"fromName":"广东", "toName":"福建","coords":name2Pos("广东","福建")},
-    {"fromName":"广东", "toName":"北京","coords":name2Pos("广东","北京")},
-    {"fromName":"广东", "toName":"上海","coords":name2Pos("广东","上海")},
   ];
-
-	var geoCoordMap = {
-    	"武汉":[114.31,30.52],
-    	"大庆":[125.03,46.58],
-    	"test":[50,50]
-	};
 
   var isdeleting = false;
   var isadding = false;
@@ -90,6 +86,31 @@
     if(name1 == '' || name2 == '')return ['',''];
     return [chinaProvinceCoor[name1].pos, chinaProvinceCoor[name2].pos];
   }
+/**/
+
+/* region operation */
+  var isbuying = false;
+  function buyRegion()
+  {
+    isbuying = true;
+  }
+  function canaddpoint(regionname)
+  {
+    if(chinaProvinceCoor[regionname].value==0)
+    {
+      alert("尚未购买此区域");
+      return false;
+    }
+
+    if(chinaProvinceCoor[regionname].prize > commonjs.money_test)
+    {
+      alert("没有足够资金");
+      return false;
+    }
+
+    return true;
+  }
+/**/
 
 	var convertData = function (data) {
     	var res = [];
@@ -103,6 +124,7 @@
       for(var k in data)
       {
         var geoCoord = data[k].pos;
+        geoCoord.push(k);
         geoCoord.push(data[k].value);
         res.push(geoCoord);
       }
@@ -116,9 +138,6 @@
     console.log(this.position);
 
   }
-
-  import echarts from 'echarts'
-  import commonjs from './common.js'
 	export default
 	{
 
@@ -168,10 +187,11 @@
     				},
             visualMap:{
               min:0,
-              max:300,
+              max:1,
               type: 'piecewise',
+              color:['#5FAD56', '#EDF7F6'],
               realtime:false,
-              splitNumber:5
+              splitNumber:2
             },
             series: [
    					    {
@@ -227,7 +247,7 @@
                   var pos = [param.event.offsetX,param.event.offsetY];
                   var geopos = myChart.convertFromPixel('geo', pos);
                   chinaProvinceCoor["test"].pos = geopos;
-                  console.log(geopos);
+                  //console.log(geopos);
 
                   myChart.setOption({
                     series:[
@@ -268,6 +288,33 @@
 
                   }
 
+                  if(isbuying)
+                  {
+                    if(param.componentSubType == "scatter")
+                    {
+                      var scatter_name = param.data[2];
+                      if(commonjs.money_test >= chinaProvinceCoor[scatter_name].prize)
+                      {
+                        commonjs.money_test -= chinaProvinceCoor[scatter_name].prize;
+                        chinaProvinceCoor[scatter_name].value = 1;
+                        myChart.setOption({
+                          series:[
+                            {
+                              data: convertData(chinaProvinceCoor)
+                            },
+                            {
+                              data:lineData
+                            }
+                          ]
+                        });
+                      }
+                      else
+                      {
+                        alert('没有足够资金');
+                      }
+                    }
+                  }
+
                   if(isadding)
                   {
                     if(param.componentSubType == "scatter")
@@ -282,6 +329,11 @@
                       }
                       else if(addIndex == 1)
                       {
+                        if(!canaddpoint(scatter_name))
+                        {
+                          isadding = false;
+                          return;                          //!!! 注意：添加点失败，此处返回
+                        }
                         addCatch['toName'] = scatter_name;
                         addCatch['coords'].push(chinaProvinceCoor[scatter_name].pos);
                         var newline = {"fromName": addCatch["fromName"], "toName":addCatch["toName"], "coords":addCatch["coords"]};
@@ -306,9 +358,9 @@
                     if(param.componentSubType == "scatter")
                     {
                       commonjs.selectedRegion = param.data[2];
-                      console.log(commonjs.selectedRegion);
                     }
                   }
+                  /*no more code*/
                	});
             }
 
@@ -323,6 +375,10 @@
 
                 var addline = document.getElementById('addline');
                 addline.addEventListener('click', addLine,false);
+
+                var buyregion = document.getElementById('buyregion');
+                buyregion.addEventListener('click', buyRegion,false);
+
             })
 		}
 	}
