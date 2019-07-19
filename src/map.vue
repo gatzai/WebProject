@@ -102,7 +102,7 @@
       return false;
     }
 
-    if(chinaProvinceCoor[regionname].prize > commonjs.money_test)
+    if(chinaProvinceCoor[regionname].prize > commonjs.account.cash.amount)
     {
       alert("没有足够资金");
       return false;
@@ -131,7 +131,23 @@
     	return res;
 	};
 
-
+/*buying operation*/
+function updataAccount(trade)
+{
+    if(trade.cash)
+    {
+        commonjs.account.cash.amount += trade.cash;
+    }
+    if(trade.bitcoin)
+    {
+        commonjs.account.bitcoin.amount += trade.bitcoin;
+    }
+    if(trade.othercoin)
+    {
+        commonjs.account.othercoin.amount += trade.othercoin;
+    }
+}
+/**/
 
   function onPoint()
   {
@@ -293,25 +309,26 @@
                     if(param.componentSubType == "scatter")
                     {
                       var scatter_name = param.data[2];
-                      if(commonjs.money_test >= chinaProvinceCoor[scatter_name].prize)
-                      {
-                        commonjs.money_test -= chinaProvinceCoor[scatter_name].prize;
-                        chinaProvinceCoor[scatter_name].value = 1;
-                        myChart.setOption({
-                          series:[
-                            {
-                              data: convertData(chinaProvinceCoor)
-                            },
-                            {
-                              data:lineData
-                            }
-                          ]
-                        });
-                      }
-                      else
-                      {
-                        alert('没有足够资金');
-                      }
+                      if(chinaProvinceCoor[scatter_name].value==0)
+                        if(commonjs.account.cash.amount >= chinaProvinceCoor[scatter_name].prize)
+                        {
+                          updataAccount({cash:-chinaProvinceCoor[scatter_name].prize});
+                          chinaProvinceCoor[scatter_name].value = 1;
+                          myChart.setOption({
+                            series:[
+                              {
+                                data: convertData(chinaProvinceCoor)
+                              },
+                              {
+                                data:lineData
+                              }
+                            ]
+                          });
+                        }
+                        else
+                        {
+                          alert('没有足够资金');
+                        }
                     }
                   }
 
@@ -338,6 +355,7 @@
                         addCatch['coords'].push(chinaProvinceCoor[scatter_name].pos);
                         var newline = {"fromName": addCatch["fromName"], "toName":addCatch["toName"], "coords":addCatch["coords"]};
                         lineData.push(newline);
+                        updataAccount({cash:-100});   //随便扣了100元
                         myChart.setOption({
                           series:[
                             {

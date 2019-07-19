@@ -19,7 +19,6 @@ console.log(echarts.version);
 
 //data area
 var num_card_data = {num:0};
-var increasement = 0.000000;
 var exrate = {
     bitcoin: 90000
 };
@@ -31,11 +30,47 @@ var area_data = {
     temperature:0
 }
 
-var account_data = {
-    "bitcoin":{icon:"monetization_on",      data:0.0},
-    "cash":{icon:"account_balance_wallet",  data:0}
+/* money operation*/
 
-};
+
+function updataAccount(trade)
+{
+    if(trade.cash)
+    {
+        commonjs.account.cash.amount += trade.cash;
+    }
+    if(trade.bitcoin)
+    {
+        commonjs.account.bitcoin.amount += trade.bitcoin;
+    }
+    if(trade.othercoin)
+    {
+        commonjs.account.othercoin.amount += trade.othercoin;
+    }
+}
+
+function updataIncrease(trade)
+{
+    if(trade.cash)
+    {
+        commonjs.account.cash.increase += trade.cash;
+    }
+    if(trade.bitcoin)
+    {
+        commonjs.account.bitcoin.increase += trade.bitcoin;
+    }
+    if(trade.othercoin)
+    {
+        commonjs.account.othercoin.increase += trade.othercoin;
+    }
+}
+
+function formatAccount(account)
+{
+    account.cash.amount = 0;
+    return account;
+}
+/**/
 
 var card_info = [
     {name:"9800GT",    heat: 0.01,  speed: 0.0001,  space:1, powercs: 10,  prize:500 , temp: 20 },
@@ -211,15 +246,9 @@ Vue.component("flashlight",
         setInterval(function()
         {
             testbool = !testbool;
-            if(Math.random() * 10>bound)
-            {
-                bound +=deltarate;
-                lightFlash(light,testbool);
-            }
-            else
-            {
-                bound -=deltarate;
-            }
+
+                lightFlash(light,Math.random() > 0.95);
+
         },100);
     },
 }
@@ -253,20 +282,18 @@ function removecardInRack(card)
         num_card_data.num = 0;
         return;
     }
-    increasement -= card.speed;
+    updataIncrease({bitcoin:-card.speed});
     --num_card_data.num;
 }
 /**/
 
-//test
-var test_index = 10;
 
 new Vue({
     el: '#content',
     data:
     {
         numcard:num_card_data,
-        accountdata:account_data,
+        accountdata: formatAccount(commonjs.account),
         shopinfo:shop_info,
         erlist:er_list,
         window:0,
@@ -297,32 +324,26 @@ new Vue({
 
         addcard:function(card)
         {
-            if(account_data.cash.data >= card.prize)
+            if(commonjs.account.cash.amount >= card.prize)
             {
 
                 if(!addcardInRack(card))
                 {
-                    account_data.cash.data -= card.prize;            
-                    increasement += card.speed;
-                    //
+                    updataAccount({cash:-card.prize});
+                    updataIncrease({bitcoin:card.speed});
                     ++num_card_data.num;
                 }
             }
         },
         mousework:function()
         {
-            account_data.cash.data += 10000;
+            var addcash = {cash: 10000};
+            updataAccount(addcash);
         },
         btc2Cash:function()
         {
-            var money = account_data.bitcoin.data * .2 * exrate.bitcoin;
-            account_data.bitcoin.data = 0;
-            account_data.cash.data += money
-        },
-        racktest:function(rack)
-        {
-            rack.items.push({name:++test_index});
-            //console.log(i.name);
+            var money = commonjs.account.bitcoin.amount * .2 * exrate.bitcoin;
+            updataAccount({bitcoin: -commonjs.account.bitcoin.amount, cash: money});
         },
         removecard:function(indexcard,card, rack)
         {
@@ -350,7 +371,7 @@ new Vue(
 
 setInterval(function()
 {
-    account_data.bitcoin.data += increasement;
+    updataAccount({bitcoin: commonjs.account.bitcoin.increase});
 },1000);
 
 
