@@ -25,7 +25,7 @@
 							</v-card>
 							</v-flex>
 
-							<v-flex offset-sm4 sm2>
+							<v-flex  offset-sm4 sm2>
 								<v-btn v-on:click="mousework">打工</v-btn>
 								
 							</v-flex>
@@ -33,7 +33,6 @@
 						</v-card-text>
 					</v-card>
 				</v-flex>
-
 	    	<v-layout pa-1 row wrap>
 	    		<v-flex d-flex sm9>
 	    			<v-window v-model="window">
@@ -49,14 +48,13 @@
 				    							A
 				    						</v-card-title>
 				    						<v-flex v-for="(i,index) in rack.items">
-					    						<v-card color="blue">
+					    						<v-card dark>
 					    							<v-card-text>
 					    								<v-layout row>
 					    								<v-flex xm10>
 					    								{{i.name}}
-					    								
-					    								<div style="border-radius: 10px; background-color: #FF3344; height: 10px; width: 10px;"></div>
-					    								<v-progress-linear color="green" :value="90"></v-progress-linear>
+					    								<flashlight></flashlight>
+					    								<v-progress-linear color="green" :value="i.temp"></v-progress-linear>
 					    								</v-flex>
 														
 														<v-flex align-self-end xm1>
