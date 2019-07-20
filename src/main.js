@@ -232,11 +232,6 @@ Vue.component("flashlight",
     },
     template:'<div ref="mh1" style=\"border-radius: 10px; background-color: lightgreen; height: 10px; width: 10px; font-size: 10px;\"></div>',
     mounted:function(){
-        //setInterval(function(){
-        //    var tag = document.getElementsByTagName('div');
-        //    this.size = Math.random() * 10;
-        //},5000);
-        //console.log(this);
         var testsize = this.size;
         var light = this.$refs.mh1;
         var bound = this.bound;
@@ -298,6 +293,7 @@ new Vue({
         erlist:er_list,
         window:0,
         /*region data*/
+        regionname: selectedRegionName,
         showingregion: showingRegion,
         /**/
     },
@@ -312,7 +308,7 @@ new Vue({
                 {
                     for(var j=0; j<regions[0][region].racks[i].items.length; ++j)
                     {
-                        var heat = regions[0][region].racks[i].items[j].heat;
+                        var heat = 1;//regions[0][region].racks[i].items[j].heat;
                         regions[0][region].racks[i].items[j].temp += heat * 10;
                     }
                 }
@@ -357,6 +353,7 @@ new Vue({
             selectedRegionName = commonjs.selectedRegion;
             if(regions[0][selectedRegionName])
                 showingRegion[0] = regions[0][selectedRegionName];
+            this.regionname = selectedRegionName;
         },
 
     }

@@ -44,7 +44,7 @@
 	    						<v-layout row wrap>
 	    							<v-flex sm12>
 	    								<v-card>
-	    									<v-card-title>{{showingregion[0]}}</v-card-title>
+	    									<v-card-title>{{regionname}}</v-card-title>
 	    								</v-card>
 	    							</v-flex>
 	    							<v-flex v-for="rack in showingregion[0].racks" sm2>
@@ -103,13 +103,6 @@
           								<div slot-scope="{ active, toggle }">
             								<v-btn :ripple="false" v-on:click="changeregion" :input-value="active" @click="toggle">
 												Region
-        							    	</v-btn>
-        							  	</div>
-        							</v-item>
-        							<v-item>
-          								<div slot-scope="{ active, toggle }">
-            								<v-btn :ripple="false" :input-value="active" @click="toggle">
-												Test
         							    	</v-btn>
         							  	</div>
         							</v-item>

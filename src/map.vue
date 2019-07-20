@@ -375,7 +375,9 @@ function updataAccount(trade)
                   {
                     if(param.componentSubType == "scatter")
                     {
-                      commonjs.selectedRegion = param.data[2];
+                      var name = param.data[2];
+                      if(chinaProvinceCoor[name].value == 1)
+                        commonjs.selectedRegion = name;
                     }
                   }
                   /*no more code*/
