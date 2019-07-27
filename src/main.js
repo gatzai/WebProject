@@ -72,20 +72,37 @@ function formatAccount(account)
 }
 /**/
 
+//card object
+function cardObj()
+{
+
+}
+
 var card_info = [
-    {name:"9800GT",    heat: 0.01,  speed: 0.0001,  space:1, powercs: 10,  prize:500 , temp: 20 },
-    {name:"GTX1060",   heat: 0.03,  speed: 0.001,   space:1, powercs:  9,  prize:1000, temp: 20 },
-    {name:"GTX1070",   heat: 0.05,  speed: 0.005,   space:1, powercs:  8,  prize:2000, temp: 20 },
-    {name:"RTX280Ti",  heat: 0.07,  speed: 0.009,   space:1, powercs:  7,  prize:4000, temp: 20 },
-    {name:"Titan RTX", heat: 0.09,  speed: 0.015,   space:1, powercs:  6,  prize:8000, temp: 20 },
-    {name:"RX460",     heat: 0.10,  speed: 0.03,    space:1, powercs:  5,  prize:600 , temp: 20 },
-    {name:"RX470",     heat: 0.15,  speed: 0.05,    space:1, powercs:  4,  prize:2000, temp: 20 },
-    {name:"RX570",     heat: 0.18,  speed: 0.08,    space:1, powercs:  3,  prize:3000, temp: 20 },
-    {name:"R9",        heat: 0.22,  speed: 0.1,     space:1, powercs:  2,  prize:9000, temp: 20 }
+    {name:"9800GT",    type:'gcard', heat: 0.01,  speed: 0.0001,  space:1, powercs: 10,  prize:500 , temp: 20 },
+    {name:"GTX1060",   type:'gcard', heat: 0.03,  speed: 0.001,   space:1, powercs:  9,  prize:1000, temp: 20 },
+    {name:"GTX1070",   type:'gcard', heat: 0.05,  speed: 0.005,   space:1, powercs:  8,  prize:2000, temp: 20 },
+    {name:"RTX280Ti",  type:'gcard', heat: 0.07,  speed: 0.009,   space:1, powercs:  7,  prize:4000, temp: 20 },
+    {name:"Titan RTX", type:'gcard', heat: 0.09,  speed: 0.015,   space:1, powercs:  6,  prize:8000, temp: 20 },
+    {name:"RX460",     type:'gcard', heat: 0.10,  speed: 0.03,    space:1, powercs:  5,  prize:600 , temp: 20 },
+    {name:"RX470",     type:'gcard', heat: 0.15,  speed: 0.05,    space:1, powercs:  4,  prize:2000, temp: 20 },
+    {name:"RX570",     type:'gcard', heat: 0.18,  speed: 0.08,    space:1, powercs:  3,  prize:3000, temp: 20 },
+    {name:"R9",        type:'gcard', heat: 0.22,  speed: 0.1,     space:1, powercs:  2,  prize:9000, temp: 20 }
 ];
 
+function getnewCard(card)
+{
+    var newcard = {}; // = {name:card.name, type:'gcard',heat: card.heat, speed: card.speed,  space:card.space, powercs: card.powercs, prize:card.prize, temp: card.temp};
+    for(var obj in card)
+    {
+        newcard[obj] = card[obj];
+    }
+
+    return newcard;
+}
+
 var radiator_info = [
-    {name:"初级散热器", effect:0, speed:0, space:2, powercs: "", prize:1}
+    {name:"初级散热器", type:'radiator', effect:1, speed:0, space:2, powercs: "", prize:1}
 ]
 
 var shop_info = [
@@ -111,11 +128,19 @@ var rack = {
 var regions=[
     {
         "广东":{
+            tempture: 20,
+            powercs: 0,
+            cooler: 0,
+            powersupport: 100,
             curren_space: 3,
             max_space: 18,
             racks:[]
         },
         "福建":{
+            tempture: 20,
+            powercs: 0,
+            cooler: 0,
+            powersupport: 100,
             curren_space: 2,
             max_space: 8,
             racks:[]
@@ -125,6 +150,11 @@ var regions=[
 
 var showingRegion=[
     {
+        tempture: 20,
+        powercs: 0,
+        powersupport: 100,
+        cooler: 0,
+
         curren_space: 4,
         max_space: 18,
         racks:[]
@@ -296,23 +326,37 @@ new Vue({
         regionname: selectedRegionName,
         showingregion: showingRegion,
         /**/
+        testdata:"#FF00000",
     },
     mounted:function()
     {
+        //update every rack
         setInterval(function(){
 
-            //console.log(regions);
+            var heatsum = 0;
+            var cool = 0;
             for(var region in regions[0])
             {
                 for(var i=0; i<regions[0][region].racks.length; ++i)
                 {
                     for(var j=0; j<regions[0][region].racks[i].items.length; ++j)
                     {
-                        var heat = 1;//regions[0][region].racks[i].items[j].heat;
-                        regions[0][region].racks[i].items[j].temp += heat * 10;
+                        var thiscard = regions[0][region].racks[i].items[j];
+                        if(thiscard.type == 'gcard')
+                        {
+                            if(regions[0][region].tempture < 21) cool = 0;
+                            thiscard.temp += thiscard.heat * 20 - cool;
+                            heatsum += thiscard.heat;
+                        }
+                        else if(thiscard.type == 'radiator')
+                        {
+                            cool += thiscard.effect;
+                        }
                     }
                 }
             }
+            //console.log(heatsum);
+            showingRegion[0].tempture = 20 + heatsum - cool;
         },1000);
     },
     methods:
@@ -322,12 +366,21 @@ new Vue({
         {
             if(commonjs.account.cash.amount >= card.prize)
             {
-
-                if(!addcardInRack(card))
+                //新建一个显卡的对象，而不是原来的引用
+                var newcard = getnewCard(card);
+                if(!addcardInRack(newcard))
                 {
-                    updataAccount({cash:-card.prize});
-                    updataIncrease({bitcoin:card.speed});
-                    ++num_card_data.num;
+                    console.log(newcard.type);
+                    if(newcard.type == 'gcard')
+                    {
+                        updataAccount({cash:-newcard.prize});
+                        updataIncrease({bitcoin:newcard.speed});
+                        ++num_card_data.num;
+                    }
+                    else if(newcard.type == 'radiator')
+                    {
+                        showingRegion[0].cooler += newcard.effect;
+                    }
                 }
             }
         },

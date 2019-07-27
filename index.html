@@ -13,23 +13,12 @@
 	<div id = "content">
     <v-app>
 
-	    <v-container fluid grid-list-md>
+	    <v-container fluid grid-list-md text-xs-center>
 
 				<v-flex d-flex pa-0>
 					<v-card color="cyan">
-						<v-card-text>
-						<v-layout row wrap>
-							<v-flex d-flex v-for="i in accountdata" sm3>
-							<v-card color="cyan" flat>
-								<v-card-text><v-icon>{{i.icon}}</v-icon>  {{Math.round(i.amount*100000000)/100000000}}</v-card-text>
-							</v-card>
-							</v-flex>
-
-							<v-flex  offset-sm4 sm2>
-								<v-btn v-on:click="mousework">打工</v-btn>
-								
-							</v-flex>
-						</v-layout>
+						<v-card-text class="display-1">
+							Welcome to Graphic Card Placement
 						</v-card-text>
 					</v-card>
 				</v-flex>
@@ -45,6 +34,11 @@
 	    							<v-flex sm12>
 	    								<v-card>
 	    									<v-card-title>{{regionname}}</v-card-title>
+	    									<v-card-text>
+	    										机房温度：{{showingregion[0].tempture}}
+	    										机房电力供应：{{showingregion[0].powercs}}
+	    										机房耗电：{{showingregion[0].powersupport}}
+	    									</v-card-text>
 	    								</v-card>
 	    							</v-flex>
 	    							<v-flex v-for="rack in showingregion[0].racks" sm2>
@@ -59,7 +53,7 @@
 					    								<v-flex xm10>
 					    								{{i.name}}
 					    								<flashlight></flashlight>
-					    								<v-progress-linear color="green" :value="i.temp"></v-progress-linear>
+					    								<v-progress-linear :color="i.temp>70?'red':'green'" :value="i.temp"></v-progress-linear>
 					    								</v-flex>
 														
 														<v-flex align-self-end xm1>
@@ -126,9 +120,18 @@
 		    			</v-flex>
 		    			<v-flex md12>
 		    				<v-card>
-		    					<v-card-title>Speed</v-card-title>
 		    					<v-card-text>
-		    						<v-progress-linear :value="20"></v-progress-linear>
+		    						<v-layout row wrap>
+										<v-flex d-flex v-for="i in accountdata" sm3>
+										<v-card  flat>
+											<v-card-text><v-icon>{{i.icon}}</v-icon>  {{Math.round(i.amount*100000000)/100000000}}</v-card-text>
+										</v-card>
+										</v-flex>
+
+										<v-flex  offset-sm4 sm2>
+											<v-btn v-on:click="mousework">打工</v-btn>
+										</v-flex>
+									</v-layout>
 		    					</v-card-text>
 		    				</v-card>    				
 		    			</v-flex>
